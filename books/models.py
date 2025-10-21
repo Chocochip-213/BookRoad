@@ -18,6 +18,10 @@ class Book(models.Model):
     publisher_description = models.TextField(blank=True, help_text="출판사 제공 책소개")
     authors_json = models.JSONField(null=True, blank=True, help_text="저자 상세 정보 (JSON)")
 
+    # 원본 목차
+    raw_toc = models.TextField(blank=True, help_text="알라딘 API 원본 목차(파싱 전)")
+
+
     # --- 상태 관리 및 임베딩 ---
     toc_parsing_failed = models.BooleanField(default=False, help_text="목차 파싱 실패 여부")
     summary_embedding = VectorField(dimensions=768, null=True, blank=True, help_text="요약 정보 임베딩 벡터")
@@ -33,7 +37,7 @@ class Chapter(models.Model):
     book = models.ForeignKey(Book, related_name='chapters', on_delete=models.CASCADE, help_text="연관 도서")
     order = models.PositiveIntegerField(help_text="챕터 순서")
     level = models.PositiveIntegerField(default=1, help_text="챕터 계층 레벨")
-    title = models.CharField(max_length=1024, help_text="챕터 제목")
+    title = models.TextField(help_text="챕터 제목")
     title_embedding = VectorField(dimensions=768, null=True, blank=True, help_text="챕터 제목 임베딩 벡터")
 
     class Meta:
