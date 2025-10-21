@@ -21,3 +21,4 @@ openai
 # Document Parsing
 python-docx
 PyMuPDF
+django-environ

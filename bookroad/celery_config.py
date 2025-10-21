@@ -1,4 +1,4 @@
-# bookroad/celery.py
+# bookroad/celery_config.py
 import os
 from celery import Celery
 
@@ -7,8 +7,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bookroad.settings')
 
 app = Celery('bookroad')
 
-# 'CELERY'라는 네임스페이스를 가진 모든 Django 설정을 로드
-app.config_from_object('django.conf:settings', namespace='CELERY')
+# 'bookroad'라는 네임스페이스를 가진 모든 Django 설정을 로드
+app.config_from_object('django.conf:settings', namespace='bookroad')
 
 # 등록된 Django 앱 설정에서 tasks.py 파일을 자동으로 찾음
 app.autodiscover_tasks()
