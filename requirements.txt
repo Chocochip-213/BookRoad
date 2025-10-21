@@ -1,0 +1,23 @@
+# Django & Web
+django
+djangorestframework
+gunicorn
+psycopg2-binary
+django-environ
+
+# Async Tasks
+celery
+redis
+
+# Database & Vector
+pgvector
+
+# AI/NLP
+sentence-transformers
+spacy
+ko_core_news_sm @ https://github.com/explosion/spacy-models/releases/download/ko_core_news_sm-3.7.0/ko_core_news_sm-3.7.0.tar.gz
+openai
+
+# Document Parsing
+python-docx
+PyMuPDF
