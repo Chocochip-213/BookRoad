@@ -62,6 +62,14 @@ services:
     env_file:
       - ./ingestion_service/.env
 
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1 # 1개의 GPU를 할당 (또는 'all')
+              capabilities: [ gpu ]
+
 volumes:
   postgres_ingestion_data:
   postgres_rag_data:

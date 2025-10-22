@@ -7,6 +7,9 @@ ENV PYTHONUNBUFFERED 1
 # 3. 작업 디렉토리 설정
 WORKDIR /app
 
+# (최신 CUDA 12.1을 원하시면 "cu121"로 변경)
+RUN pip install torch --index-url https://download.pytorch.org/whl/cu118
+
 # 4. requirements.txt 파일을 먼저 복사하고 라이브러리 설치
 # (이렇게 하면 나중에 코드만 바뀔 때 라이브러리를 다시 설치하지 않아 빌드 속도가 빨라집니다)
 COPY requirements.txt .
