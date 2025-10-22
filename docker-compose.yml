@@ -1,42 +1,67 @@
 services:
-  db:
+  postgres_ingestion_db:
     image: pgvector/pgvector:pg16
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_ingestion_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env
+      - ./ingestion_service/.env
     ports:
       - "5432:5432"
+
+  postgres_rag_db:
+    image: pgvector/pgvector:pg16
+    volumes:
+      - postgres_rag_data:/var/lib/postgresql/data/
+    env_file:
+      - ./ingestion_service/.env
+    ports:
+      - "5433:5432"
 
   redis:
     image: redis:7.2-alpine
     ports:
       - "6379:6379"
 
-  backend:
-    build: .
+  ingestion_service:
+    build:
+      context: ./ingestion_service
     command: python manage.py runserver 0.0.0.0:8000
 #    command: tail -f /dev/null
     volumes:
-      - .:/app
+      - ./ingestion_service:/app
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - postgres_ingestion_db
       - redis
     env_file:
-      - ./.env
+      - ./ingestion_service/.env
 
-  celery_worker:
-    build: .
+  ingestion_worker:
+    build:
+      context: ./ingestion_service
     command: celery -A bookroad worker -l info
     volumes:
-      - .:/app
+      - ./ingestion_service:/app
     depends_on:
-      - backend
+      - ingestion_service
       - redis # worker도 redis에 직접 의존하므로 추가하는 것이 좋습니다.
     env_file:
-      - ./.env
+      - ./ingestion_service/.env
+
+  dataengineering_service:
+    build:
+      context: ./dataengineering_service
+
+    command: python run_etl.py
+    volumes:
+      - ./dataengineering_service:/app
+    depends_on:
+      - postgres_ingestion_db
+      - postgres_rag_db
+    env_file:
+      - ./ingestion_service/.env
 
 volumes:
-  postgres_data:
+  postgres_ingestion_data:
+  postgres_rag_data:
