@@ -1,4 +1,5 @@
 # books/tasks.py
+import time
 
 from celery import shared_task, group, chain
 from bookroad.services import AladinAPI
@@ -55,7 +56,7 @@ def _fetch_all_pages(api, method, params):
 
 
 # === 파이프라인 1 (검색어 대폭 확장) ===
-@shared_task
+@shared_task(rate_limit='1/s')
 def discover_isbns_for_category(category_id):
     """하이브리드 및 다중 질의 전략으로 ISBN 목록을 확장하여 탐색합니다."""
     api = AladinAPI()
@@ -91,9 +92,12 @@ def discover_isbns_for_category(category_id):
             isbns_from_query = _fetch_all_pages(api, strategy['method'], strategy['params'])
             if isbns_from_query:
                 unique_isbns.update(isbns_from_query)
+
+            time.sleep(0.5)
         except Exception as e:
             # 한두 개의 검색어가 실패해도 전체가 중단되지 않도록 예외 처리
             print(f"Warning: Failed fetching strategy {strategy.get('params')} for CID {category_id}. Error: {e}")
+            time.sleep(1)
 
     print(
         f"Category {category_id}: Discovered {len(unique_isbns)} unique ISBNs from {len(query_strategies)} strategies.")
