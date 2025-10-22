@@ -1,0 +1,17 @@
+# dataengineering_service/requirements.txt
+
+# 데이터 처리를 위한 필수 라이브러리
+pandas
+sqlalchemy
+
+# PostgreSQL DB 연결을 위한 드라이버
+psycopg2-binary
+
+# 텍스트를 벡터로 변환하기 위한 임베딩 모델 라이브러리
+sentence-transformers
+
+#.env 파일에서 환경 변수를 읽기 위한 라이브러리
+python-dotenv
+
+# pgvector와 SQLAlchemy를 연결하기 위한 라이브러리
+pgvector
