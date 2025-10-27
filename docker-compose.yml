@@ -13,9 +13,9 @@ services:
     volumes:
       - postgres_rag_data:/var/lib/postgresql/data/
     env_file:
-      - ./ingestion_service/.env
+      - ./dataengineering_service/.env
     ports:
-      - "5433:5432"
+      - "15433:5432"
 
   redis:
     image: redis:7.2-alpine
@@ -60,7 +60,7 @@ services:
       - postgres_ingestion_db
       - postgres_rag_db
     env_file:
-      - ./ingestion_service/.env
+      - ./dataengineering_service/.env
 
     deploy:
       resources:
