@@ -15,7 +15,7 @@ services:
     env_file:
       - ./dataengineering_service/.env
     ports:
-      - "15433:5432"
+      - "15433:5432" # 포트 연결 오류로 포트변경 5433 -> 15433
 
   redis:
     image: redis:7.2-alpine
