@@ -133,6 +133,7 @@ celerybeat.pid
 
 # Environments
 ingestion_service/.env
+dataengineering_service/.env
 .venv
 env/
 venv/
