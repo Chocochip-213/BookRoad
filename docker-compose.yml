@@ -1,21 +1,21 @@
 services:
-  postgres_ingestion_db:
-    image: pgvector/pgvector:pg16
-    volumes:
-      - postgres_ingestion_data:/var/lib/postgresql/data/
-    env_file:
-      - ./ingestion_service/.env
-    ports:
-      - "5432:5432"
-
-  postgres_rag_db:
-    image: pgvector/pgvector:pg16
-    volumes:
-      - postgres_rag_data:/var/lib/postgresql/data/
-    env_file:
-      - ./dataengineering_service/.env
-    ports:
-      - "15433:5432" # 포트 연결 오류로 포트변경 5433 -> 15433
+#  postgres_ingestion_db:
+#    image: pgvector/pgvector:pg16
+#    volumes:
+#      - postgres_ingestion_data:/var/lib/postgresql/data/
+#    env_file:
+#      - ./ingestion_service/.env
+#    ports:
+#      - "5432:5432"
+#
+#  postgres_rag_db:
+#    image: pgvector/pgvector:pg16
+#    volumes:
+#      - postgres_rag_data:/var/lib/postgresql/data/
+#    env_file:
+#      - ./dataengineering_service/.env
+#    ports:
+#      - "15433:5432" # 포트 연결 오류로 포트변경 5433 -> 15433
 
   redis:
     image: redis:7.2-alpine
@@ -32,7 +32,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgres_ingestion_db
+#      - postgres_ingestion_db
       - redis
     env_file:
       - ./ingestion_service/.env
@@ -56,20 +56,20 @@ services:
     command: python run_etl.py
     volumes:
       - ./dataengineering_service:/app
-    depends_on:
-      - postgres_ingestion_db
-      - postgres_rag_db
+#    depends_on:
+#      - postgres_ingestion_db
+#      - postgres_rag_db
     env_file:
       - ./dataengineering_service/.env
 
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1 # 1개의 GPU를 할당 (또는 'all')
-              capabilities: [ gpu ]
-
-volumes:
-  postgres_ingestion_data:
-  postgres_rag_data:
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - driver: nvidia
+#              count: 1 # 1개의 GPU를 할당 (또는 'all')
+#              capabilities: [ gpu ]
+#
+#volumes:
+#  postgres_ingestion_data:
+#  postgres_rag_data:
